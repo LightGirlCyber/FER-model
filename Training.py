@@ -4,6 +4,18 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization
 from tensorflow.keras.layers import Conv2D, MaxPooling2D
 import os
+from tensorflow.keras.applications import EfficientNetB0
+import numpy as np
+import tensorflow as tf
+import random
+
+# Set all random seeds for reproducibility
+np.random.seed(42)
+tf.random.set_seed(42)
+random.seed(42)
+
+# For GPU determinism (if using GPU)
+tf.config.experimental.enable_op_determinism()
 
 num_class=7
 img_rows,img_cols=48,48 #image size
@@ -16,16 +28,18 @@ validation_data=r'C:\Users\nourm\OneDrive\Desktop\PROJECTS\UNITY MODEL PROJECT\F
 #image data generator section
 
 #here we generated some images
-train_dataGen=ImageDataGenerator (
-  rescale=1./255,
-  rotation_range=10 , #reduce from 30
-  shear_range=0.1 , #reduce from 0.3
-  zoom_range=0.1, #reduce from 0.3
-    width_shift_range=0.1, #reduce from 0.3
-      height_shift_range=0.1, #reduce from 0.3
-        horizontal_flip=True,
-         # vertical_flip=True
-          )
+
+train_dataGen=ImageDataGenerator(
+    rescale=1./255,
+    rotation_range=15,           # Increase from 10 to 15
+    shear_range=0.10,            # Increase from 0.1 to 0.2 back to 0.15
+    zoom_range=0.10,             # Increase from 0.1 to 0.2 back to 0.15 back to 0.1
+    width_shift_range=0.10,      # Increase from 0.1 to 0.2 back to 0.15
+    height_shift_range=0.10,     # Increase from 0.1 to 0.2 back to 0.15
+    horizontal_flip=True
+    #brightness_range=[0.8, 1.2], # ADD: brightness variation- remove for now
+    #channel_shift_range=0.1      # ADD: slight channel shift remove for now 
+)
 
 
 validation_dataGen=ImageDataGenerator(rescale=1./255)
@@ -52,8 +66,8 @@ color_mode='grayscale',
 model= Sequential()
 
 
-#change, block 1-4, increase dropout from 0.2 to 0.3
-#change, block 5-6, decrease dropout from 0.5 to 0.4
+#change, block 1-4, increase dropout from 0.2 to 0.3 0.2
+#change, block 5-6, decrease dropout from 0.5 to 0.4 0.3
 
 
 #Block 1 - had 2 layer of convutional 2d here
@@ -74,7 +88,8 @@ model.add(Activation('elu'))
 model.add(BatchNormalization())
 
 model.add(MaxPooling2D(pool_size=(2,2)))
-model.add(Dropout(0.3))
+
+model.add(Dropout(0.2))
 
 
 #Block 2 -no input size , 64 neurons
@@ -95,7 +110,10 @@ model.add(Activation('elu'))
 model.add(BatchNormalization())
 
 model.add(MaxPooling2D(pool_size=(2,2)))
-model.add(Dropout(0.3))
+
+model.add(Dropout(0.2))
+
+
 
 #Block 3 -no input size , 128 neurons
 
@@ -115,7 +133,10 @@ model.add(Activation('elu'))
 model.add(BatchNormalization())
 
 model.add(MaxPooling2D(pool_size=(2,2)))
-model.add(Dropout(0.3))
+
+model.add(Dropout(0.2))
+
+
 
 #Block4 -no input size , 256 neurons
 
@@ -135,29 +156,38 @@ model.add(Activation('elu'))
 model.add(BatchNormalization())
 
 model.add(MaxPooling2D(pool_size=(2,2)))
-model.add(Dropout(0.3))
+
+model.add(Dropout(0.2))
 
 
 #Block 5 -flatten!  - Two fully connected layers with 64 neurons
 
 model.add(Flatten())
+
 model.add(Dense(64, kernel_initializer='he_normal'))
+
 model.add(Activation('elu'))
+
 model.add(BatchNormalization())
-model.add(Dropout(0.4))
+
+model.add(Dropout(0.3))
 
 # Block-6  -Two fully connected layers with 64 neurons
 
 model.add(Dense(64, kernel_initializer='he_normal'))
+
 model.add(Activation('elu'))
+
 model.add(BatchNormalization())
-model.add(Dropout(0.4))
+
+model.add(Dropout(0.3))
 
 
 
 # Block-7
 
 model.add(Dense(num_class,kernel_initializer='he_normal'))
+
 model.add(Activation('softmax'))
 
 print(model.summary())
@@ -206,4 +236,4 @@ history=model.fit(
                 validation_data=validation_generator,
                 validation_steps=nb_validation_samples//batch_size)
 
-model.save('Emotion_model2.h5')
+model.save('Emotion_model12.h5')
