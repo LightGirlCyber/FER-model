@@ -27,7 +27,7 @@ validation_data=r'C:\Users\nourm\OneDrive\Desktop\PROJECTS\UNITY MODEL PROJECT\F
 
 #image data generator section
 
-#here we generated some images
+#here we generated some images 
 
 train_dataGen=ImageDataGenerator(
     rescale=1./255,
