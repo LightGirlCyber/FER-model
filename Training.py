@@ -70,82 +70,84 @@ model= Sequential()
 #change, block 5-6, decrease dropout from 0.5 to 0.4 0.3
 
 
-# Block 1 - 3 Conv2D layers (was 2)
-model.add(AveragePooling2D(6, 3, input_shape=(48, 48, 1)))
-model.add(Conv2D(32, (3, 3), padding='same', kernel_initializer='he_normal'))
+#Block 1 - had 2 layer of convutional 2d here
+#32 neurens in 1st layer
+model.add(Conv2D(32,(3,3),padding='same',kernel_initializer='he_normal', input_shape=(img_rows,img_cols,1)))
+model.add(Activation('elu'))  #set threshhold value for every neuron
+model.add(BatchNormalization()) #technique for neural network- stabalise /improve performance
+model.add(Conv2D(32,(3,3),padding='same',kernel_initializer='he_normal')) #32 neurons in 2nd layer
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-model.add(Conv2D(32, (3, 3), padding='same', kernel_initializer='he_normal'))
-model.add(Activation('elu'))
-model.add(BatchNormalization())
-# ⭐ NEW ADDITION ⭐
 model.add(Conv2D(32, (3, 3), padding='same', kernel_initializer='he_normal'))  
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-# ⭐ END NEW ADDITION ⭐
-model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
 
-# Block 2 - 3 Conv2D layers (was 2)
-model.add(Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal'))
+
+#Block 2 -no input size , 64 neurons
+model.add(Conv2D(64,(3,3),padding='same',kernel_initializer='he_normal')) #32 neurens in 1st layer
+model.add(Activation('elu'))  #set threshhold value for every neuron
+model.add(BatchNormalization()) #technique for neural network- stabalise /improve performance
+model.add(Conv2D(64,(3,3),padding='same',kernel_initializer='he_normal')) #32 neurons in 2nd layer
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-model.add(Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal'))
+model.add(Conv2D(32, (3, 3), padding='same', kernel_initializer='he_normal'))  
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-# ⭐ NEW ADDITION ⭐
-model.add(Conv2D(64, (3, 3), padding='same', kernel_initializer='he_normal'))  
-model.add(Activation('elu'))
-model.add(BatchNormalization())
-# ⭐ END NEW ADDITION ⭐
-model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
 
-# Block 3 - 3 Conv2D layers (was 2)
-model.add(Conv2D(128, (3, 3), padding='same', kernel_initializer='he_normal'))
+
+
+#Block 3 -no input size , 128 neurons
+model.add(Conv2D(128,(3,3),padding='same',kernel_initializer='he_normal'))
+model.add(Activation('elu'))
+model.add(BatchNormalization()) #technique for neural network- stabalise /improve performance
+model.add(Conv2D(128,(3,3),padding='same',kernel_initializer='he_normal'))  #32 neurons in 2nd layer
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-model.add(Conv2D(128, (3, 3), padding='same', kernel_initializer='he_normal'))
+model.add(Conv2D(32, (3, 3), padding='same', kernel_initializer='he_normal'))  
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-# ⭐ NEW ADDITION ⭐
-model.add(Conv2D(128, (3, 3), padding='same', kernel_initializer='he_normal'))  
-model.add(Activation('elu'))
-model.add(BatchNormalization())
-# ⭐ END NEW ADDITION ⭐
-model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
 
-# Block 4 - 3 Conv2D layers (was 2)
-model.add(Conv2D(256, (3, 3), padding='same', kernel_initializer='he_normal'))
+
+
+#Block4 -no input size , 256 neurons
+model.add(Conv2D(256,(3,3),padding='same',kernel_initializer='he_normal')) #32 neurens in 1st layer
+model.add(Activation('elu')) #set threshhold value for every neuron
+model.add(BatchNormalization()) #technique for neural network- stabalise /improve performance
+model.add(Conv2D(256,(3,3),padding='same',kernel_initializer='he_normal')) #32 neurons in 2nd layer
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-model.add(Conv2D(256, (3, 3), padding='same', kernel_initializer='he_normal'))
+model.add(Conv2D(32, (3, 3), padding='same', kernel_initializer='he_normal'))  
 model.add(Activation('elu'))
 model.add(BatchNormalization())
-# ⭐ NEW ADDITION ⭐
-model.add(Conv2D(256, (3, 3), padding='same', kernel_initializer='he_normal'))  
-model.add(Activation('elu'))
-model.add(BatchNormalization())
-# ⭐ END NEW ADDITION ⭐
-model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
 
-# Block 5 - Flatten and first fully connected (NO CHANGES)
+
+#Block 5 -flatten!  - Two fully connected layers with 64 neurons
 model.add(Flatten())
 model.add(Dense(64, kernel_initializer='he_normal'))
 model.add(Activation('elu'))
 model.add(BatchNormalization())
 model.add(Dropout(0.3))
 
-# Block 6 - Second fully connected (NO CHANGES)
+# Block-6  -Two fully connected layers with 64 neurons
 model.add(Dense(64, kernel_initializer='he_normal'))
 model.add(Activation('elu'))
 model.add(BatchNormalization())
 model.add(Dropout(0.3))
 
-# Block 7 - Final classification (NO CHANGES)
-model.add(Dense(num_class, kernel_initializer='he_normal'))
+
+
+# Block-7
+
+model.add(Dense(num_class,kernel_initializer='he_normal'))
+
 model.add(Activation('softmax'))
 
 print(model.summary())
