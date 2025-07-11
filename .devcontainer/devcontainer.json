@@ -1,0 +1,33 @@
+{
+    "name": "Unity GPU Development Environment",
+    "dockerComposeFile": "../docker-compose.gpu.yml",
+    "service": "unity-gpu-dev",
+    "workspaceFolder": "/workspace",
+    "shutdownAction": "stopCompose",
+    "features": {},
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "ms-toolsai.jupyter",
+                "ms-vscode.makefile-tools",
+                "GitHub.copilot",
+                "ms-python.pylint"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/bin/python3",
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "python.formatting.provider": "black",
+                "jupyter.askForKernelRestart": false,
+                "files.associations": {
+                    "*.py": "python"
+                }
+            }
+        }
+    },
+    "postCreateCommand": "pip install --user ipykernel",
+    "remoteUser": "root"
+}
